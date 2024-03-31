@@ -7,7 +7,6 @@ import { NextFunction } from "express";
 const server = new OAuth2Server({
   model: OAuth, // See https://github.com/oauthjs/node-oauth2-server for specification
   accessTokenLifetime: 60 * 60,
-  requireClientAuthentication: {}
   // requireClientAuthentication: { password: false, },
 });
 
@@ -68,10 +67,12 @@ const authorize = async (req: any, res: any) => {
 
 const token = (req: any, res: any) => {
   const request = new Request(req);
+  console.log('🚀 ~ request:', request)
   const response = new Response(res);
   return server
-    .token(request, response, { alwaysIssueNewRefreshToken: false })
+    .token(request, response, { alwaysIssueNewRefreshToken: false, requireClientAuthentication: {password: false}  })
     .then((result) => {
+      console.log('🚀 ~ result:', result)
       res.json(result);
     })
     .catch((err) => {

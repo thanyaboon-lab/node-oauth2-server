@@ -9,7 +9,7 @@ interface User extends mongoose.Document {
   _id: string;
   username: string;
   password: string;
-  clerkId: string;
+  clientId: string;
 }
 
 interface OAuthClients extends mongoose.Document {
@@ -55,7 +55,7 @@ mongoose.model<User>(
     _id: { type: String, auto: true },
     username: { type: String },
     password: { type: String },
-    clerkId: { type: String },
+    clientId: { type: String },
   })
 );
 mongoose.model<OAuthClients>(
