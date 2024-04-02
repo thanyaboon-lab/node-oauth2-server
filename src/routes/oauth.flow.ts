@@ -7,4 +7,5 @@ router.get("/authorize", authorize);
 router.post("/token", token);
 router.get("/authenticate", authenticate, test);
 
+
 export default router;

@@ -33,12 +33,17 @@ const authorize = async (req: any, res: any) => {
     .authorize(request, response, {
       authenticateHandler: {
         handle: async () => {
+          console.log('🚀 ~ /authorize:')
           // Present in Flow 1 and Flow 2 ('client_id' is a required for /oauth/authorize
+          console.log('🚀 ~ req.query:', req.query)
+          console.log('🚀 ~ req.body:', req.body)
+          console.log('🚀 ~ req.auth:', req.auth)
           const { client_id } = req.query || {};
           if (!client_id) throw new Error("Client ID not found");
           const client = await OAuthClientsModel.findOne({
             clientId: client_id,
           });
+          console.log('🚀 ~ client:', client)
           if (!client) throw new Error("Client not found");
           // Only present in Flow 2 (authentication screen)
           const { userId } = req.auth || {};
@@ -47,8 +52,9 @@ const authorize = async (req: any, res: any) => {
           if (!client.userId && !userId) return {}; // falsy value
           const user = await UserDb.findOne({
             ...(client.userId && { _id: client.userId }),
-            ...(userId && { clerkId: userId }),
+            ...(userId && { clientId: userId }),
           });
+          console.log('🚀 ~ user:', user)
           if (!user) throw new Error("User not found");
           return { _id: user._id };
         },
@@ -67,12 +73,10 @@ const authorize = async (req: any, res: any) => {
 
 const token = (req: any, res: any) => {
   const request = new Request(req);
-  console.log('🚀 ~ request:', request)
   const response = new Response(res);
   return server
-    .token(request, response, { alwaysIssueNewRefreshToken: false, requireClientAuthentication: {password: false}  })
+    .token(request, response, { alwaysIssueNewRefreshToken: false  })
     .then((result) => {
-      console.log('🚀 ~ result:', result)
       res.json(result);
     })
     .catch((err) => {
@@ -84,11 +88,13 @@ const token = (req: any, res: any) => {
 };
 
 const authenticate = (req: any, res: any, next: NextFunction) => {
+  console.log('🚀 ~ authenticate:')
   const request = new Request(req);
   const response = new Response(res);
   return server
     .authenticate(request, response)
     .then((data) => {
+      console.log('🚀 ~ data:', data)
       req.auth = { userId: data?.user?.id, sessionType: "oauth2" };
       next();
     })
