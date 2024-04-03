@@ -179,8 +179,8 @@ async function generateRefreshToken(client: OAuth2Server.Client, user: OAuth2Ser
   // Create a payload for the JWT
   const payload = {
     // Standard JWT claims
-    iss: 'YourIssuer', // Issuer
-    aud: 'YourAudience', // Audience
+    iss: 'oauth', // Issuer
+    aud: 'oauth', // Audience
     sub: user.id, // Subject (typically the user ID)
     // Additional claims
     client_id: client.id,

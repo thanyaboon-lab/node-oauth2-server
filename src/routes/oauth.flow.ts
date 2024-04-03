@@ -1,11 +1,11 @@
 import express from "express";
-import {authorize, token, authenticate, test} from "../services/authentication.service";
+import {authorize, token, authenticate, test, isAuthenticated} from "../services/authentication.service";
 
 const router = express.Router();
 
-router.get("/authorize", authorize);
+router.get("/authorize", isAuthenticated, authorize);
 router.post("/token", token);
-router.get("/authenticate", authenticate, test);
+router.get("/authenticate", authenticate);
 
 
 export default router;
