@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import oAuthFlowRoutes from "./routes/oauth.flow";
+import oAuthClientRoutes from "./routes/oauth.client";
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser';
 import { jwks, openidConfiguration } from './openid-configuration';
@@ -26,6 +27,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
 
 app.use("/oauth", oAuthFlowRoutes);
+app.use("/callback", oAuthClientRoutes);
 
 app.use("/.well-known/openid-configuration/jwks", jwks);
 app.use("/.well-known/openid-configuration", openidConfiguration);

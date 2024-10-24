@@ -28,6 +28,7 @@ const server = new OAuth2Server({
 
 // Authentication middleware
 function isAuthenticated(req: any, res: any, next: NextFunction) {
+  console.log('🚀 ~ req.session:', req.session)
   if (req.session && req.session.user) {
     return next();
   } else {
@@ -132,6 +133,7 @@ const login = async (req: any, res: any) => {
   req.session.user = {
     username: "bambino"
   }
+  res.status(200).send('Login SuccessFully');
 }
 
 export { server, authorize, token, authenticate, test, isAuthenticated, login };
